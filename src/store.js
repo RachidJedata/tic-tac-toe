@@ -58,7 +58,6 @@ const isThereWinner = (board) => {
     // Check rows for a winner
     for (let i = 0; i < 3; i++) {
         if (board[i][0] !== '' && board[i][0] === board[i][1] && board[i][0] === board[i][2]) {
-            alert('1');
             return { hasWinner: true, winningCells: [[i, 0], [i, 1], [i, 2]] }; // Row winner
         }
     }
@@ -66,7 +65,6 @@ const isThereWinner = (board) => {
     // Check columns for a winner
     for (let i = 0; i < 3; i++) {
         if (board[0][i] !== '' && board[0][i] === board[1][i] && board[0][i] === board[2][i]) {
-            alert('2');
             return { hasWinner: true, winningCells: [[0, i], [1, i], [2, i]] }; // Column winner
         }
     }
@@ -75,12 +73,10 @@ const isThereWinner = (board) => {
     if (board[1][1] !== '') {
         // Main diagonal (top-left to bottom-right)
         if (board[0][0] === board[1][1] && board[0][0] === board[2][2]) {
-            alert('3');
             return { hasWinner: true, winningCells: [[0, 0], [1, 1], [2, 2]] }; // Diagonal winner
         }
         // Anti-diagonal (top-right to bottom-left)
         if (board[0][2] === board[1][1] && board[0][2] === board[2][0]) {
-            alert('4');
             return { hasWinner: true, winningCells: [[0, 2], [1, 1], [2, 0]] }; // Diagonal winner
         }
     }
@@ -99,6 +95,8 @@ const playingReducer = (state = initialGameState, action) => {
                 currentPlayer: action.currentPlayer,
             };
         case PLAY:
+            if (state.isGameOver) return state;
+            
             const { row, col } = action.payload;
             if (state.board[row][col] === '') {
                 // Create a new copy of the state to ensure immutability

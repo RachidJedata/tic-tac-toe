@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { choosingAction, playAction } from './store'; // Import both action creators
 import './App.css';
@@ -7,18 +7,33 @@ const Game = () => {
   const players = useSelector((state) => state.players); // Access the players state
   const game = useSelector((state) => state.game); // Access the game state
   const dispatch = useDispatch();
+  const [showGameOver, setShowGameOver] = useState(false); // State to control game over UI delay
 
   const choosingPlayer = (val) => {
     dispatch(choosingAction(val)); // Dispatch the choosing action
   };
 
   const handleCellClick = (row, col) => {
-    dispatch(playAction(row, col)); // Dispatch the play action
+    if (!game.isGameOver && !game.board[row][col]) {
+      dispatch(playAction(row, col)); // Dispatch the play action
+    }
   };
 
   const isWinningCell = (row, col) => {
     return game.winningCells.some((cell) => cell[0] === row && cell[1] === col);
   };
+
+  useEffect(() => {
+    if (game.isGameOver) {
+      // Delay showing the game over UI by 500ms
+      const timer = setTimeout(() => {
+        setShowGameOver(true);
+      }, 2500);
+      return () => clearTimeout(timer); // Cleanup timer
+    } else {
+      setShowGameOver(false); // Reset game over UI state
+    }
+  }, [game.isGameOver]);
 
   const playingUI = () => {
     return (
@@ -29,7 +44,7 @@ const Game = () => {
             row.map((cell, colIndex) => (
               <div
                 key={`${rowIndex}-${colIndex}`}
-                className={`cell ${cell} ${isWinningCell(rowIndex, colIndex) ? 'winning-cell' : ''}`}
+                className={`cell ${cell || ''} ${isWinningCell(rowIndex, colIndex) ? 'winning-cell' : ''}`}
                 onClick={() => handleCellClick(rowIndex, colIndex)}
               >
                 {cell}
@@ -72,9 +87,9 @@ const Game = () => {
     );
   };
 
-  // if (game.isGameOver) {
-  //   return gameOverUI(); // Show game over UI if the game is over
-  // }
+  if (showGameOver) {
+    return gameOverUI(); // Show game over UI if the game is over
+  }
 
   return !players.player1 ? choosingUI() : playingUI(); // Show choosing or playing UI
 };
