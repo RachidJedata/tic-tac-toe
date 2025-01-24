@@ -20,12 +20,12 @@ const Game = () => {
   };
 
   const isWinningCell = (row, col) => {
-    return game.winningCells.some((cell) => cell[0] === row && cell[1] === col);
+    return game.winningCells?.some((cell) => cell[0] === row && cell[1] === col);
   };
 
   useEffect(() => {
     if (game.isGameOver) {
-      // Delay showing the game over UI by 500ms
+      // Delay showing the game over UI by 2500ms
       const timer = setTimeout(() => {
         setShowGameOver(true);
       }, 2500);
@@ -57,9 +57,21 @@ const Game = () => {
   };
 
   const gameOverUI = () => {
+    const isDraw = game.winningCells.length === 0; // Check if the game is a draw
+    const winner = isDraw
+      ? null
+      : players.player1 === game.board[game.winningCells[0][0]][game.winningCells[0][1]]
+      ? 'Player 1'
+      : 'Player 2';
+
     return (
       <div className="game-over">
         <h1>Game Over</h1>
+        <h2>
+          {isDraw
+            ? "It's a Draw!"
+            : `${winner} Won!`}
+        </h2>
         <button onClick={() => window.location.reload()}>Play Again</button>
       </div>
     );

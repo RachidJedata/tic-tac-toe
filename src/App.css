@@ -193,3 +193,27 @@ h2 {
 .winning-cell.o::before {
   border: 5px solid wheat !important;
 }
+
+.game-over {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center children horizontally */
+  justify-content: center; /* Center children vertically */
+  text-align: center; /* Center text inside h1 */
+  height: 100vh; /* Make the container take the full viewport height */
+}
+
+.game-over h1 {
+  margin-bottom: 20px; /* Add some space between the h1 and the button */
+}
+
+.game-over button {
+  padding: 12px;
+  margin: 0;
+  border-radius: 3px;
+  border: none;
+  font-size: large;
+  color: #f2cd88;
+  background-color: #92a67a;
+  cursor: pointer;
+}
