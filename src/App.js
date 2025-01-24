@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { choosingAction, playAction } from './store'; // Import both action creators
+import { choosingAction, playAction, gameMode, pcMoveAction } from './store'; // Import all action creators
 import './App.css';
 
 const Game = () => {
@@ -8,6 +8,13 @@ const Game = () => {
   const game = useSelector((state) => state.game); // Access the game state
   const dispatch = useDispatch();
   const [showGameOver, setShowGameOver] = useState(false); // State to control game over UI delay
+  const [showGameMode, setShowGameMode] = useState(true); // State to control game mode selection UI
+
+  const setGameMode = (val) => {
+    const pcPlaying = val === 'pc'; // Set pcPlaying based on the selected mode
+    dispatch(gameMode(pcPlaying)); // Dispatch the game mode action
+    setShowGameMode(false); // Hide the game mode selection UI
+  };
 
   const choosingPlayer = (val) => {
     dispatch(choosingAction(val)); // Dispatch the choosing action
@@ -16,6 +23,9 @@ const Game = () => {
   const handleCellClick = (row, col) => {
     if (!game.isGameOver && !game.board[row][col]) {
       dispatch(playAction(row, col)); // Dispatch the play action
+      if (game.pcPlaying) {
+        dispatch(pcMoveAction());
+      }
     }
   };
 
@@ -34,6 +44,30 @@ const Game = () => {
       setShowGameOver(false); // Reset game over UI state
     }
   }, [game.isGameOver]);
+
+  const gameModeUI = () => {
+    return (
+      <div className="container">
+        <div className="wrapper">
+          <h1 className="title">Choose Game Mode</h1>
+          <div className="mode-selection">
+            <button
+              className="mode-button"
+              onClick={() => setGameMode('pc')}
+            >
+              Play vs Computer
+            </button>
+            <button
+              className="mode-button"
+              onClick={() => setGameMode('twoPlayers')}
+            >
+              Play vs Friend
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const playingUI = () => {
     return (
@@ -61,8 +95,8 @@ const Game = () => {
     const winner = isDraw
       ? null
       : players.player1 === game.board[game.winningCells[0][0]][game.winningCells[0][1]]
-      ? 'Player 1'
-      : 'Player 2';
+        ? 'Player 1'
+        : 'Player 2';
 
     return (
       <div className="game-over">
@@ -101,6 +135,10 @@ const Game = () => {
 
   if (showGameOver) {
     return gameOverUI(); // Show game over UI if the game is over
+  }
+
+  if (showGameMode) {
+    return gameModeUI(); // Show game mode selection UI
   }
 
   return !players.player1 ? choosingUI() : playingUI(); // Show choosing or playing UI

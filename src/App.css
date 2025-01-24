@@ -13,6 +13,7 @@ body {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
+/* Game Container */
 .game {
   display: flex;
   flex-direction: column;
@@ -48,7 +49,7 @@ h2 {
   gap: 1.5rem;
 }
 
-/* Use .cell instead of .symbol */
+/* Cell Styling */
 .cell {
   width: 120px;
   height: 120px;
@@ -56,6 +57,11 @@ h2 {
   border-radius: 1rem;
   position: relative;
   border: 3px solid #646cff;
+  cursor: pointer;
+}
+
+.cell:hover {
+  background-color: #2a2a2a;
 }
 
 /* X Symbol */
@@ -92,6 +98,7 @@ h2 {
   transform: translate(-50%, -50%);
 }
 
+/* Buttons */
 .select-btn {
   padding: 0.8rem 1.5rem;
   font-size: 1.2rem;
@@ -117,51 +124,10 @@ h2 {
   border-radius: 1rem;
 }
 
-.cell {
+.board .cell {
   width: 100px;
   height: 100px;
-  background-color: #242424;
   border-radius: 0.5rem;
-  cursor: pointer;
-  position: relative;
-}
-
-.cell:hover {
-  background-color: #2a2a2a;
-}
-
-.hidden {
-  display: none;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-  .selection-container {
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .cell {
-    width: 100px;
-    height: 100px;
-  }
-
-  .cell.x::before,
-  .cell.x::after {
-    height: 80px;
-    width: 10px;
-  }
-
-  .cell.o::before {
-    width: 60px;
-    height: 60px;
-    border-width: 10px;
-  }
-
-  .board .cell {
-    width: 80px;
-    height: 80px;
-  }
 }
 
 /* Winning Cell Animation */
@@ -194,26 +160,109 @@ h2 {
   border: 5px solid wheat !important;
 }
 
+/* Game Over Screen */
 .game-over {
   display: flex;
-  flex-direction: column; /* Stack children vertically */
-  align-items: center; /* Center children horizontally */
-  justify-content: center; /* Center children vertically */
-  text-align: center; /* Center text inside h1 */
-  height: 100vh; /* Make the container take the full viewport height */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
 }
 
 .game-over h1 {
-  margin-bottom: 20px; /* Add some space between the h1 and the button */
+  margin-bottom: 20px;
 }
 
 .game-over button {
   padding: 12px;
-  margin: 0;
   border-radius: 3px;
   border: none;
   font-size: large;
   color: #f2cd88;
   background-color: #92a67a;
   cursor: pointer;
+}
+
+/* Game Mode Selection */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #4a1d96, #1e3a8a);
+  padding: 2rem;
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.mode-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.mode-button {
+  width: 100%;
+  padding: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.mode-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.mode-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .selection-container {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .cell {
+    width: 100px;
+    height: 100px;
+  }
+
+  .cell.x::before,
+  .cell.x::after {
+    height: 80px;
+    width: 10px;
+  }
+
+  .cell.o::before {
+    width: 60px;
+    height: 60px;
+    border-width: 10px;
+  }
+
+  .board .cell {
+    width: 80px;
+    height: 80px;
+  }
 }
