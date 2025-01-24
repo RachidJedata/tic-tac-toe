@@ -16,6 +16,10 @@ const Game = () => {
     dispatch(playAction(row, col)); // Dispatch the play action
   };
 
+  const isWinningCell = (row, col) => {
+    return game.winningCells.some((cell) => cell[0] === row && cell[1] === col);
+  };
+
   const playingUI = () => {
     return (
       <div className="game">
@@ -25,7 +29,7 @@ const Game = () => {
             row.map((cell, colIndex) => (
               <div
                 key={`${rowIndex}-${colIndex}`}
-                className={`cell ${cell}`}
+                className={`cell ${cell} ${isWinningCell(rowIndex, colIndex) ? 'winning-cell' : ''}`}
                 onClick={() => handleCellClick(rowIndex, colIndex)}
               >
                 {cell}
@@ -68,9 +72,9 @@ const Game = () => {
     );
   };
 
-  if (game.isGameOver) {
-    return gameOverUI(); // Show game over UI if the game is over
-  }
+  // if (game.isGameOver) {
+  //   return gameOverUI(); // Show game over UI if the game is over
+  // }
 
   return !players.player1 ? choosingUI() : playingUI(); // Show choosing or playing UI
 };
