@@ -24,7 +24,9 @@ const Game = () => {
     if (!game.isGameOver && !game.board[row][col]) {
       dispatch(playAction(row, col)); // Dispatch the play action
       if (game.pcPlaying) {
-        dispatch(pcMoveAction());
+        setTimeout(()=>{
+          dispatch(pcMoveAction());
+        },200);
       }
     }
   };
@@ -96,7 +98,7 @@ const Game = () => {
       ? null
       : players.player1 === game.board[game.winningCells[0][0]][game.winningCells[0][1]]
         ? 'Player 1'
-        : 'Player 2';
+        : game.pcPlaying ? 'PC' : 'Player 2';
 
     return (
       <div className="game-over">
