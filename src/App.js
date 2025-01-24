@@ -4,16 +4,16 @@ import { choosingAction, playAction } from './store'; // Import both action crea
 import './App.css';
 
 const Game = () => {
-  const player = useSelector((state) => state.players); // Access the correct state slice
-  const game = useSelector((state) => state.game); // Access the correct state slice
+  const players = useSelector((state) => state.players); // Access the players state
+  const game = useSelector((state) => state.game); // Access the game state
   const dispatch = useDispatch();
 
   const choosingPlayer = (val) => {
-    dispatch(choosingAction(val)); // Correctly dispatch the action
+    dispatch(choosingAction(val)); // Dispatch the choosing action
   };
 
-  const playing = (row, col) => {
-    dispatch(playAction(row, col)); // Correctly dispatch the action
+  const handleCellClick = (row, col) => {
+    dispatch(playAction(row, col)); // Dispatch the play action
   };
 
   const playingUI = () => {
@@ -21,25 +21,27 @@ const Game = () => {
       <div className="game">
         <h1>Tic Tac Toe</h1>
         <div className="board">
-          <div onClick={() => playing(0, 0)} className={`cell ${game[0][0]}`}>
-          </div>
-          <div onClick={() => playing(0, 1)} className={`cell ${game[0][1]}`}>
-          </div>
-          <div onClick={() => playing(0, 2)} className={`cell ${game[0][2]}`}>
-          </div>
-          <div onClick={() => playing(1, 0)} className={`cell ${game[1][0]}`}>
-          </div>
-          <div onClick={() => playing(1, 1)} className={`cell ${game[1][1]}`}>
-          </div>
-          <div onClick={() => playing(1, 2)} className={`cell ${game[1][2]}`}>
-          </div>
-          <div onClick={() => playing(2, 0)} className={`cell ${game[2][0]}`}>
-          </div>
-          <div onClick={() => playing(2, 1)} className={`cell ${game[2][1]}`}>
-          </div>
-          <div onClick={() => playing(2, 2)} className={`cell ${game[2][2]}`}>
-          </div>
+          {game.board.map((row, rowIndex) =>
+            row.map((cell, colIndex) => (
+              <div
+                key={`${rowIndex}-${colIndex}`}
+                className={`cell ${cell}`}
+                onClick={() => handleCellClick(rowIndex, colIndex)}
+              >
+                {cell}
+              </div>
+            ))
+          )}
         </div>
+      </div>
+    );
+  };
+
+  const gameOverUI = () => {
+    return (
+      <div className="game-over">
+        <h1>Game Over</h1>
+        <button onClick={() => window.location.reload()}>Play Again</button>
       </div>
     );
   };
@@ -66,7 +68,11 @@ const Game = () => {
     );
   };
 
-  return <>{!player.player1 ? choosingUI() : playingUI()}</>; // Check for player1 in the state
+  if (game.isGameOver) {
+    return gameOverUI(); // Show game over UI if the game is over
+  }
+
+  return !players.player1 ? choosingUI() : playingUI(); // Show choosing or playing UI
 };
 
 export default Game;
